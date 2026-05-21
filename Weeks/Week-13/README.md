@@ -37,3 +37,8 @@
 ## 3. 送程式到 ESP 32 之中
 
 1) 確認 **終端機** 的工作目錄
+
+![img](in-class/imgs/img06.png)
+
+
+2) 使用 `make` 指令，在 Windows 中是會對應到 `make.bat`。 如果無法使用，請用 AI 自行修改。

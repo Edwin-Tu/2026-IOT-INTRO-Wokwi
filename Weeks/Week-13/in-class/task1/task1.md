@@ -1,51 +1,55 @@
-# Task 1: ESP32 C Hello World
+# Task 1: ESP32 MicroPython OLED Hello
 
 ## 目標
-在 Wokwi 中使用 ESP32 C 專案輸出 `Hello, World!`。
+在 Wokwi 中使用 ESP32 + SSD1306 OLED，顯示文字 `Hello, August!`。
 
-## 先在 solutions 建立你的作業資料夾（先做這步）
-請先在本 repo 建立以下路徑，再開始寫程式：
-
-`Weeks/Week-13/solutions/<你的學號>/task1/`
-
-例如你的學號是 `112360001`，路徑應為：
-
-`Weeks/Week-13/solutions/112360001/task1/`
-
-## Wokwi 專案位置（本題）
-請使用本題提供的 Wokwi 專案資料夾：
+## 專案位置
+請使用本題資料夾：
 
 `Weeks/Week-13/in-class/task1/`
 
-此資料夾內已提供：
+目前主要檔案：
+- `main.py`
 - `diagram.json`
 - `wokwi.toml`
-- `src/main.c`
+- `Makefile`
+- `make.bat`（Windows 用）
 
 ## 任務要求
-1. 使用 Wokwi 開啟本題 ESP32 C 專案。
-2. 在 `src/main.c` 完成程式，輸出：`Hello, World!`
-3. 執行後，確認序列埠（Serial Monitor）有正確顯示輸出。
+1. 開啟本題 Wokwi 專案。
+2. 了解 `main.py` 中 I2C 與 OLED 初始化流程。
+3. 執行程式並確認 OLED 顯示 `Hello, August!`。
 
-## 程式範例
-```c
-#include <stdio.h>
+## 執行方式
+在 `task1` 目錄內執行：
 
-void app_main(void) {
-  printf("Hello, World!\\n");
-}
+macOS / Linux:
+```bash
+make run
 ```
 
-## 繳交內容
-請將本題程式放在：
+Windows:
+```bat
+make.bat run
+```
 
-`Weeks/Week-13/solutions/<你的學號>/task1/`
+可選擇指定 RFC2217 Port（預設 `4000`）：
 
-建議包含：
-- `src/main.c`
-- `README.md`（可簡短描述執行結果）
+```bash
+make run 4001
+```
+
+```bat
+make.bat run 4001
+```
+
+## 程式重點
+- I2C 腳位：`scl=22`、`sda=21`
+- OLED 尺寸：`128x64`
+- 使用 `ssd1306.SSD1306_I2C(...)` 建立顯示物件
+- `oled.text(...)` 寫字後呼叫 `oled.show()` 更新畫面
 
 ## 驗收標準
-- 程式可在 Wokwi 正常執行。
-- 序列埠可看到 `Hello, World!`。
-- 檔案路徑正確。
+- 程式可透過 `make` 或 `make.bat` 正常執行。
+- Wokwi 模擬中 OLED 成功顯示 `Hello, August!`。
+- `main.py` 內容與接線設定一致。
