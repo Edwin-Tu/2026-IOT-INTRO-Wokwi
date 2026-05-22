@@ -1,44 +1,66 @@
 # Week 13
 
-> 本週（Week 13）使用 ESP32 的 C 語言版本進行 Wokwi 程式實作。
+> 本週主題：`ESP32 + MicroPython + SH1107 OLED + DHT22`。
 
-## 1. 本週課堂作業
+## 本週重點
+- 使用 ESP32（Wokwi）進行 MicroPython 實作
+- 練習 SH1107 128x128 OLED 顯示與座標校正
+- 加入 DHT22 感測器，完成即時溫度顯示
+- 整合中文版面與動畫效果
 
-- 請依照 `in-class/` 內的題目與指示完成程式。
-- 本週 Wokwi 開發板請統一使用 `ESP32`。
-- 本週程式語言請使用 `C`。
-- 本週解答請放在：`solutions/<你的學號>/`
-- 送 PR 前請確認：檔案路徑正確、程式可編譯/可執行。
+## 目錄結構
+- `in-class/`：課堂練習題（task1 ~ task4）
+- `solutions/`：同學解答（請放在 `solutions/<你的學號>/`）
+- `HOMEWORK.md`：本週作業說明（詳細評分與繳交規格）
 
+## 課堂練習建議順序
+1. `in-class/task3a`：
+- SH1107 版面排版
+- 中文字呈現
+- 動畫效果（如花火節）
 
-## 2. 調整硬體與下載 diagram.json
+2. `in-class/task4`：
+- DHT22 讀值
+- Serial debug 訊息
+- 溫度顯示整合到 OLED
 
-1) 打開 [Wokwi](https://wokwi.com/) 中的 MicroPython OLED Display
+## 本週作業
+請完成：
+- [HOMEWORK.md](HOMEWORK.md)
 
-![img1](in-class/imgs/img01.png)
+作業核心要求：
+1. 版型需對齊 `task3a` 風格
+2. 必須有動畫
+3. 必須呈現中文字
+4. 必須顯示 DHT22 即時溫度
 
-2) 確認右手邊的硬體配置是符合需求的。
-3) 切換到硬體配置檔 `diagram.json` 分頁中
-4) 抓下來配置檔的所有內容。確認要有大括號包住，格式才會正確。
+## 開發與執行
+在各 task 目錄（例如 `in-class/task4/`）執行：
 
-![img](in-class/imgs/img02.png)
+```bash
+make run
+```
 
-5) 以**文字格式**開啟硬體配置檔 `diagram.json` 
+若遇到 `ModuleNotFoundError: No module named 'serial'`：
 
-![img](in-class/imgs/img03.png)
-![img](in-class/imgs/img04.png)
+```bash
+python3 -m pip install pyserial
+```
 
-6) 貼上硬體配置內容後，存檔/關閉。
-7) 再開啟硬體配置檔 `diagram.json` 
+## 基本規範
+- 開發板：`ESP32`
+- 語言：`MicroPython`
+- 顯示器驅動：`sh1107`（不可改成 `ssd1306`）
+- 感測器：`DHT22`
 
-![img](in-class/imgs/img05.png)
+## 繳交規範
+- 解答放置：`solutions/<你的學號>/`
+- 至少包含：
+  - `main.py`
+  - `README.md`（說明設計與問題解法）
+  - 作業要求的截圖/錄影證明
 
-
-## 3. 送程式到 ESP 32 之中
-
-1) 確認 **終端機** 的工作目錄
-
-![img](in-class/imgs/img06.png)
-
-
-2) 使用 `make` 指令，在 Windows 中是會對應到 `make.bat`。 如果無法使用，請用 AI 自行修改。
+## PR 前檢查
+1. 路徑是否正確
+2. 程式是否可執行
+3. 是否符合 `HOMEWORK.md` 評分項目

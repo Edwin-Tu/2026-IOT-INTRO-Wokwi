@@ -1,15 +1,22 @@
 from machine import Pin, I2C
 import sh1107
+import dht
+import time
 
 # ESP32 I2C pin assignment for Grove SH1107 OLED (match diagram.json wiring)
 i2c = I2C(0, scl=Pin(21), sda=Pin(22))
 
 oled_width = 128
 oled_height = 128
-oled = sh1107.SH1107_I2C(oled_width, oled_height, i2c, address=0x3C, rotate=0)
-
+oled = sh1107.SH1107_I2C(oled_width, oled_height, i2c, address=0x3C, rotate=90)
 center_x = 64
-center_y = 90
+center_y = 64
+# SH1107 visible center calibration (with rotate=90 on this panel)
+dragon_center_x = center_x - 32
+dragon_center_y = center_y
+
+# DHT22 data pin (match diagram.json wiring)
+dht_sensor = dht.DHT22(Pin(23))
 
 
 def draw_circle(display, cx, cy, r, color=1):
@@ -63,9 +70,31 @@ def draw_grid(display, cx, cy, width, height, step=16, color=1):
     display.vline(cx, 0, height, color)
 
 
-oled.fill(0)
-draw_grid(oled, center_x, center_y, oled_width, oled_height)
-draw_circle(oled, center_x, center_y, 35, 1)
-draw_circle(oled, center_x, center_y, 32, 1)
-draw_star(oled, center_x, center_y, 13, 1)
-oled.show()
+while True:
+    try:
+        dht_sensor.measure()
+        temp_c = dht_sensor.temperature()
+        humidity = dht_sensor.humidity()
+
+        # Console debug output
+        print("[DEBUG] temperature = {:.1f}C, humidity = {:.1f}%".format(temp_c, humidity))
+
+        # OLED display output
+        oled.fill(0)
+        title = "Temperature"
+        temp_text = "{:.1f} C".format(temp_c)
+        title_x = max(0, dragon_center_x - (len(title) * 8) // 2)
+        temp_x = max(0, dragon_center_x - (len(temp_text) * 8) // 2)
+        oled.text(title, title_x, 16)
+        oled.text(temp_text, temp_x, 30)
+        draw_circle(oled, dragon_center_x, dragon_center_y, 20, 1)
+        draw_star(oled, dragon_center_x, dragon_center_y, 8, 1)
+        oled.show()
+
+    except Exception as e:
+        print("[ERROR] DHT22 read failed:", e)
+        oled.fill(0)
+        oled.text("Sensor Error", 16, 40)
+        oled.show()
+
+    time.sleep(2)
